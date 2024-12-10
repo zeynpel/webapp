@@ -1,8 +1,8 @@
 "use strict"; // Enables strict mode, which catches common coding errors and improves performance
 
 // main.js
-// Name: [Your Name]
-// Banner ID: [Your Banner ID]
+// Name: [Zeynep Pelit]
+// Banner ID: [001221738]
 // Course: ELEE1159
 
 const cardsArray = [

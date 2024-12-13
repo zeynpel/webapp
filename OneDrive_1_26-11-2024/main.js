@@ -38,18 +38,17 @@ function shuffle(array) {
 
 // Initialize the game
 function initGame() {
-    clearInterval(timer); // Stop any previous timer
-    timeElapsed = 0; // Reset the timer
+    clearInterval(timer);
+    timeElapsed = 0;
     updateTimer();
 
     const cardsContainer = document.getElementById("cards");
-    cardsContainer.innerHTML = ""; // Clear the container
+    cardsContainer.innerHTML = "";
 
-    let gameCards = shuffle([...cardsArray, ...cardsArray]).slice(0, numberOfCards); // Shuffle and select cards
+    let gameCards = shuffle([...cardsArray, ...cardsArray]).slice(0, numberOfCards);
     matchedCards = [];
     selectedCards = [];
 
-    // Render the cards
     gameCards.forEach((card) => {
         const cardElement = document.createElement("a");
         cardElement.href = "#";
@@ -66,22 +65,19 @@ function initGame() {
 
 // Flip card logic
 function flipCard(event) {
-    // Ignore clicks on already matched or currently flipped cards
     if (selectedCards.length >= 2 || matchedCards.includes(event.currentTarget)) {
         return;
     }
 
     const card = event.currentTarget.querySelector("img");
 
-    // Ignore clicks on the same card
     if (selectedCards.includes(event.currentTarget)) {
         return;
     }
 
-    card.src = card.dataset.front; // Reveal the card
-    selectedCards.push(event.currentTarget); // Add the card to selectedCards
+    card.src = card.dataset.front;
+    selectedCards.push(event.currentTarget);
 
-    // If two cards are flipped, check for a match
     if (selectedCards.length === 2) {
         checkMatch();
     }
@@ -93,44 +89,38 @@ function checkMatch() {
     const front1 = card1.querySelector("img").dataset.front;
     const front2 = card2.querySelector("img").dataset.front;
 
-    // If the cards match
     if (front1 === front2) {
-        matchedCards.push(card1, card2); // Add to matchedCards
-        selectedCards = []; // Clear selectedCards
+        matchedCards.push(card1, card2);
+        selectedCards = [];
 
-        // Check if all cards have been matched
         if (matchedCards.length === numberOfCards) {
-            setTimeout(() => endGame(), 500); // Delay slightly for user experience
+            setTimeout(() => endGame(), 500);
         }
     } else {
-        // If the cards don't match, flip them back after a short delay
         setTimeout(() => {
             card1.querySelector("img").src = "images/back.png";
             card2.querySelector("img").src = "images/back.png";
-            selectedCards = []; // Clear selectedCards
+            selectedCards = [];
         }, 1000);
     }
 }
-
 
 // End the game
 function endGame() {
     clearInterval(timer);
     const finishTime = timeElapsed;
 
-    // Save the player's score
     highScores.push({ name: playerName, time: finishTime });
     highScores.sort((a, b) => a.time - b.time);
-    highScores = highScores.slice(0, 10); // Keep only the top 10 scores
+    highScores = highScores.slice(0, 10);
     localStorage.setItem('highScores', JSON.stringify(highScores));
 
     alert(`Game Over! Your time: ${finishTime} seconds`);
 
-    // Prompt for a new player name
     playerName = prompt("Enter a new player name for the next game:") || "Player";
     localStorage.setItem('playerName', playerName);
 
-    initGame(); // Restart the game
+    initGame();
 }
 
 // Timer functions
@@ -198,7 +188,16 @@ function resetGame() {
     highScores = [];
     localStorage.removeItem('highScores');
     alert("High scores cleared and game reset!");
-    initGame();
+
+    // Prompt for a new player name
+    playerName = prompt("Enter your name for the new game:");
+    while (!playerName || playerName.trim() === "") {
+        playerName = prompt("Name cannot be empty. Please enter your name:");
+    }
+    localStorage.setItem('playerName', playerName);
+    document.getElementById("player").textContent = `Player: ${playerName}`;
+
+    initGame(); // Restart the game
 }
 
 // Event listeners
@@ -210,3 +209,24 @@ document.getElementById("reset_button").addEventListener("click", resetGame);
 // Start the game
 preloadImages();
 initGame();
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Prompt for Name at Start
+    let playerName = prompt("Please enter your name to start the game:");
+    while (!playerName || playerName.trim() === "") {
+        playerName = prompt("Name cannot be empty. Please enter your name:");
+    }
+    document.getElementById('player').textContent = `Player: ${playerName}`;
+
+    // Save Settings Button Logic
+    const saveSettingsButton = document.getElementById('save_settings');
+    saveSettingsButton.addEventListener('click', function () {
+        const nameInput = document.getElementById('player_name').value.trim();
+        if (nameInput === "") {
+            alert("Player name cannot be empty. Please enter a name.");
+        } else {
+            document.getElementById('player').textContent = `Player: ${nameInput}`;
+            alert("Settings saved successfully!");
+        }
+    });
+});

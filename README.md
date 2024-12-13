@@ -78,16 +78,22 @@ Memory-Game/ ├── index.html # The main HTML file ├── memory.css # CS
       <p id="high_score">High Scores:</p>
   </header>
 
-**Tabs**: Navigation for switching between the game, rules, and settings.
+  ```
 
+**Tabs**: Navigation for switching between the game, rules, and settings. Example:
+
+```html
 <div class="tabs">
     <button id="tabs_cards_link" class="tablinks active">Play Game</button>
     <button id="tabs_rules_link" class="tablinks">View Rules</button>
     <button id="tabs_settings_link" class="tablinks">Settings</button>
 </div>
 
+```
 
 **Game Area**: The game dynamically inserts card elements here.
+
+```html
 <div id="tabs_cards" class="tabcontent">
     <div id="cards"></div>
 </div>
@@ -107,7 +113,7 @@ Memory-Game/ ├── index.html # The main HTML file ├── memory.css # CS
     </select><br>
     <input type='button' id='save_settings' value='Save Settings'>
 </div>
-
+```
 ### **CSS (`memory.css`)**
 - Styles the layout, animations, and responsiveness of the game.
 - Example:
